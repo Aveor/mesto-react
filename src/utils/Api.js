@@ -78,31 +78,18 @@ class Api {
         });
     };
   
-    addLike(card) {
-      return fetch(`${this._url}/cards/likes/${card.id}`, {
-          method: 'PUT',
+    changeLikeCardStatus(id, status) {
+        return fetch(`${this._url}/cards/likes/${id}`, {
+          method: `${(status) ? 'PUT' : 'DELETE'}`,
           headers: this._headers,
         })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка: ${res.status}`);
-        })
-    }
-  
-    deleteLike(card) {
-      return fetch(`${this._url}/cards/likes/${card.id}`, {
-          method: 'DELETE',
-          headers: this._headers,
-        })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка: ${res.status}`);
-        })
-    } 
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+          })
+      }
   
     updateAvatar(link) {
       return fetch(`${this._url}/users/me/avatar`, {
