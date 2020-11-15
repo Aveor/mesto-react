@@ -24,9 +24,9 @@ function App() {
   }
   const [isDeleteConfirmationPopupOpen, setIsDeleteConfirmationPopupOpen] = React.useState(false);
   const [cards, setCards] = React.useState([]);
-  const [cardDelete, setCardDelete] = React.useState([]);
+  const [cardDelete, setCardDelete] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isLoading, setLoading] = React.useState();
+  const [isLoading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
 
@@ -71,12 +71,13 @@ function App() {
     api.deleteCard(cardDelete._id).then(() => {
       const newCards = cards.filter((c) => c._id !== cardDelete._id);
       setCards(newCards);
+      closeAllPopups();
     })
       .catch((err) => {
         console.log(err); 
       })
       .finally(() => setLoading(false));
-    closeAllPopups();
+    
   }
 
   function handleCardLike(card) {
@@ -91,24 +92,26 @@ function App() {
     setLoading(true);
     api.updateInfo(user.name, user.about).then((result) => {
       setCurrentUser(result);
+      closeAllPopups();
     })
       .catch((err) => {
         console.log(err); 
       })
       .finally(() => setLoading(false));
-    closeAllPopups();
+    
   }
 
   function handleAddPlaceSubmit(card) {
     setLoading(true);
     api.addNewCard(card.name, card.link).then((newCard) => {
-      setCards([...cards, newCard]);
+      setCards([newCard, ...cards]);
+      closeAllPopups();
     })
       .catch((err) => {
         console.log(err); 
       })
       .finally(() => setLoading(false));
-    closeAllPopups();
+    
   }
 
   
@@ -119,12 +122,13 @@ function App() {
     api.updateAvatar(user.avatar)
       .then((result) => {
         setCurrentUser(result);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => setLoading(false));
-    closeAllPopups();
+    
   }
 
   function closeAllPopups() {
